@@ -1,95 +1,173 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Icons } from "@/components/icons";
+
+export default function HomePage() {
+  const [email, setEmail] = useState('');
+  const [description, setDescription] = useState('');
+  const [images, setImages] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImages([...images, ...Array.from(event.target.files)]);
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      // 模拟提交
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      toast({
+        title: "提交成功",
+        description: "我们将尽快处理您的请求",
+      });
+    } catch (error) {
+      toast({
+        title: "提交失败",
+        description: "请稍后重试",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
+    <div className="min-h-screen bg-blue-50 flex flex-col items-center">
+      <header className="text-center py-10 space-y-2">
+        <h1 className="text-4xl font-bold text-gray-800">
+          AI-Powered Ghibli Style Filter for Your Photos
+        </h1>
+        <p className="text-gray-600 mt-4">
+          Transform your everyday photos into stunning Ghibli-style artwork with our advanced AI filter.
         </p>
-      </div>
+      </header>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <main className="w-full max-w-5xl px-4">
+        <Card>
+          <CardHeader>
+            <h2 className="text-2xl font-bold text-gray-800">创建您的吉卜力风格作品</h2>
+            <p className="text-gray-600">填写以下信息开始创作</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">邮箱地址</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="description">补充描述（可选）</Label>
+                <Textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="描述您想要的风格和效果..."
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="images">上传图片（最多3张）</Label>
+                <Input
+                  id="images"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  className="cursor-pointer"
+                />
+                {images.length > 0 && (
+                  <div className="flex gap-2 mt-2">
+                    {images.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={URL.createObjectURL(image)}
+                          alt={`Preview ${index + 1}`}
+                          className="w-20 h-20 object-cover rounded-lg"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={isLoading}
+              >
+                {isLoading && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {isLoading ? "处理中..." : "立即支付"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+        <section className="text-center mb-12">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Key Features</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <article className="bg-white shadow-md rounded-lg p-4">
+              <h3 className="font-bold text-lg text-gray-800">Instant Transformation</h3>
+              <p className="text-gray-600">Transform your photos into Ghibli-style artwork in seconds.</p>
+            </article>
+            <article className="bg-white shadow-md rounded-lg p-4">
+              <h3 className="font-bold text-lg text-gray-800">High-Quality Results</h3>
+              <p className="text-gray-600">Get stunning, high-resolution Ghibli-style artwork.</p>
+            </article>
+            <article className="bg-white shadow-md rounded-lg p-4">
+              <h3 className="font-bold text-lg text-gray-800">No Signup Required</h3>
+              <p className="text-gray-600">Start creating instantly without creating an account.</p>
+            </article>
+            <article className="bg-white shadow-md rounded-lg p-4">
+              <h3 className="font-bold text-lg text-gray-800">Multiple Styles</h3>
+              <p className="text-gray-600">Choose from various Ghibli-inspired styles for your photos.</p>
+            </article>
+          </div>
+        </section>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+        <section className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">See the Magic in Action</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <figure className="bg-white shadow-md rounded-lg p-4">
+              <img src="/images/before-after-1.jpg" alt="Portrait transformation example" className="rounded-lg" />
+              <figcaption className="text-gray-600 mt-2">Portrait</figcaption>
+            </figure>
+            <figure className="bg-white shadow-md rounded-lg p-4">
+              <img src="/images/before-after-2.jpg" alt="Outdoor transformation example" className="rounded-lg" />
+              <figcaption className="text-gray-600 mt-2">Outdoor</figcaption>
+            </figure>
+            <figure className="bg-white shadow-md rounded-lg p-4">
+              <img src="/images/before-after-3.jpg" alt="Group photo transformation example" className="rounded-lg" />
+              <figcaption className="text-gray-600 mt-2">Group Photo</figcaption>
+            </figure>
+          </div>
+        </section>
+      </main>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      <footer className="text-center py-6 bg-gray-100 mt-12">
+        <p className="text-gray-600">© 2025 Ghibli-GPT. All rights reserved.</p>
+      </footer>
+    </div>
   );
 }

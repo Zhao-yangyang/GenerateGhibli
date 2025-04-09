@@ -1,0 +1,8 @@
+name = "generate-ghibli"
+type = "javascript"
+account_id = "your-account-id"
+workers_dev = true
+
+[env.production]
+route = "your-production-route"
+zone_id = "your-zone-id"
