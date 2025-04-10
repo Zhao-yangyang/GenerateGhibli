@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/icons";
+import Image from 'next/image';
+import Head from 'next/head';
 
 export default function HomePage() {
   const [email, setEmail] = useState('');
@@ -46,7 +48,22 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col items-center">
-      <header className="text-center py-10 space-y-2">
+      <Head>
+        <title>AI-Powered Ghibli Style Filter | Transform Your Photos</title>
+        <meta name="description" content="Transform your everyday photos into stunning Ghibli-style artwork with our advanced AI filter. Perfect for portraits, outdoor scenes, and group photos." />
+        <meta name="keywords" content="Ghibli style, AI photo filter, photo transformation, Ghibli artwork, AI-powered filter" />
+        <meta name="author" content="Ghibli-GPT" />
+        <meta property="og:title" content="AI-Powered Ghibli Style Filter | Transform Your Photos" />
+        <meta property="og:description" content="Transform your everyday photos into stunning Ghibli-style artwork with our advanced AI filter. Perfect for portraits, outdoor scenes, and group photos." />
+        <meta property="og:image" content="/Distracted Boyfriend Ghibli Art.jpg" />
+        <meta property="og:url" content="https://yourwebsite.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="AI-Powered Ghibli Style Filter | Transform Your Photos" />
+        <meta name="twitter:description" content="Transform your everyday photos into stunning Ghibli-style artwork with our advanced AI filter." />
+        <meta name="twitter:image" content="/Distracted Boyfriend Ghibli Art.jpg" />
+      </Head>
+
+      <header className="text-center py-16 space-y-4">
         <h1 className="text-4xl font-bold text-gray-800">
           AI-Powered Ghibli Style Filter for Your Photos
         </h1>
@@ -55,7 +72,29 @@ export default function HomePage() {
         </p>
       </header>
 
-      <main className="w-full max-w-5xl px-4">
+      <section className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-800 mb-8">See the Magic in Action</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <figure className="bg-white shadow-md rounded-lg p-4">
+            <Image src="/Distracted Boyfriend Ghibli Art.jpg" alt="Distracted Boyfriend Ghibli Art" className="rounded-lg" width={500} height={500} />
+            <figcaption className="text-gray-600 mt-2">Distracted Boyfriend Ghibli Art</figcaption>
+          </figure>
+          <figure className="bg-white shadow-md rounded-lg p-4">
+            <Image src="/Elon Musk Smoking Ghibli Art.jpg" alt="Elon Musk Smoking Ghibli Art" className="rounded-lg" width={500} height={500} />
+            <figcaption className="text-gray-600 mt-2">Elon Musk Smoking Ghibli Art</figcaption>
+          </figure>
+          <figure className="bg-white shadow-md rounded-lg p-4">
+            <Image src="/Ghibli Style Art.jpg" alt="Ghibli Style Art" className="rounded-lg" width={500} height={500} />
+            <figcaption className="text-gray-600 mt-2">Ghibli Style Art</figcaption>
+          </figure>
+          <figure className="bg-white shadow-md rounded-lg p-4">
+            <Image src="/Distracted Boyfriend Ghibli Art (1).jpg" alt="Distracted Boyfriend Ghibli Art Variant" className="rounded-lg" width={500} height={500} />
+            <figcaption className="text-gray-600 mt-2">Distracted Boyfriend Ghibli Art Variant</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <main className="w-full max-w-5xl px-4 py-12">
         <Card>
           <CardHeader>
             <h2 className="text-2xl font-bold text-gray-800">创建您的吉卜力风格作品</h2>
@@ -99,10 +138,12 @@ export default function HomePage() {
                   <div className="flex gap-2 mt-2">
                     {images.map((image, index) => (
                       <div key={index} className="relative">
-                        <img
+                        <Image
                           src={URL.createObjectURL(image)}
                           alt={`Preview ${index + 1}`}
                           className="w-20 h-20 object-cover rounded-lg"
+                          width={80}
+                          height={80}
                         />
                       </div>
                     ))}
@@ -124,9 +165,9 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <section className="text-center mb-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Key Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="text-center py-12">
+          <h2 className="text-2xl font-bold text-gray-800 mb-8">Key Features</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <article className="bg-white shadow-md rounded-lg p-4">
               <h3 className="font-bold text-lg text-gray-800">Instant Transformation</h3>
               <p className="text-gray-600">Transform your photos into Ghibli-style artwork in seconds.</p>
@@ -143,24 +184,6 @@ export default function HomePage() {
               <h3 className="font-bold text-lg text-gray-800">Multiple Styles</h3>
               <p className="text-gray-600">Choose from various Ghibli-inspired styles for your photos.</p>
             </article>
-          </div>
-        </section>
-
-        <section className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">See the Magic in Action</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <figure className="bg-white shadow-md rounded-lg p-4">
-              <img src="/images/before-after-1.jpg" alt="Portrait transformation example" className="rounded-lg" />
-              <figcaption className="text-gray-600 mt-2">Portrait</figcaption>
-            </figure>
-            <figure className="bg-white shadow-md rounded-lg p-4">
-              <img src="/images/before-after-2.jpg" alt="Outdoor transformation example" className="rounded-lg" />
-              <figcaption className="text-gray-600 mt-2">Outdoor</figcaption>
-            </figure>
-            <figure className="bg-white shadow-md rounded-lg p-4">
-              <img src="/images/before-after-3.jpg" alt="Group photo transformation example" className="rounded-lg" />
-              <figcaption className="text-gray-600 mt-2">Group Photo</figcaption>
-            </figure>
           </div>
         </section>
       </main>
